@@ -2,37 +2,41 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-FILE *plainFile, *keyFile;
-
-char * stripInput(FILE * fileptr, int mode) {
+char * stripInput(FILE * fileptr, char mode) 
+{
 	int i = 0;
-	char c = 'x';
-	char *array;
+	char c = 'x', *str;
 	
-	array = malloc(sizeof(char) * 513);
+	str = malloc(sizeof(char) * 513);
 	
-	while (fscanf(fileptr,"%c",&c) != EOF && i < 512) {
-		if(isalpha(c)) {
-			array[i] = tolower(c);
+	while (fscanf(fileptr,"%c",&c) != EOF && i < 512) 
+	{
+		if(isalpha(c)) 
+		{
+			str[i] = tolower(c);
 			i++;
 		}
 	}
 	
-	if (mode == 1) {
-		array[i] = '\0';
+	if (mode == 'k')
+	{
+		str[i] = '\0';
 	}
 	
-	if (mode == 2) {
-		for (i; i < 512; i++) {
-			array[i] = 'x';
+	if (mode == 'p') 
+	{
+		for (i; i < 512; i++)
+		{
+			str[i] = 'x';
 		}
-		array[512] = '\0';
+		str[512] = '\0';
 	}
 	
-	return array;
+	return str;
 }
 
-char * encrypt(char *text, char *key) {
+char * encrypt(char *text, char *key) 
+{
 	int i = 0;
 	char *ciphertext;
 	
@@ -40,55 +44,56 @@ char * encrypt(char *text, char *key) {
 	
 	for (i = 0; i < strlen(text); i++) {
 		int c = (text[i] - 97 + key[i % strlen(key)] - 97) % 26  + 97;
-		ciphertext[i] = c;// + 'a';
+		ciphertext[i] = c;
 	}
 	ciphertext[i] = '\0';
 	return ciphertext;
 }
 
-int main(int argc, char **argv) {
-	int i = 0;
+void printOut(char *str)
+{
+	for (int i = 0; i < strlen(str); i++)
+	{
+		if (i % 80 == 0)
+			printf("\n");
+		printf("%c",str[i]);
+	}
+}
+
+int main(int argc, char **argv) 
+{
+	FILE *plainFile, *keyFile;
 	char *key, *text, *ciphertext;
 	
-	if (!(keyFile = fopen(argv[1], "r"))) {
+	if (!(keyFile = fopen(argv[1], "r"))) 
+	{
 		fprintf(stderr, "Could not open \"%s\"\n", argv[1]);
 		return -1;
 	}
 	
-	if (!(plainFile = fopen(argv[2], "r"))) {
+	if (!(plainFile = fopen(argv[2], "r"))) 
+	{
         fprintf(stderr, "Could not open \"%s\"\n", argv[2]);
         return -1;
     }
 	
-	key = stripInput(keyFile, 1);
-	text = stripInput(plainFile, 2);
+	key = stripInput(keyFile, 'k');
+	text = stripInput(plainFile, 'p');
 	ciphertext = encrypt(text, key);
 	
 	printf("\n\nVigenere Key:\n");
-	for (i = 0; i < strlen(key); i++)
-	{
-		if (i % 80 == 0)
-			printf("\n");
-		printf("%c",key[i]);
-	}
-	printf("\n\n");
+	printOut(key);
 	
-	printf("Plaintext:\n");
-	for (i = 0; i < strlen(text); i++)
-	{
-		if (i % 80 == 0)
-			printf("\n");
-		printf("%c",text[i]);
-	}
-	printf("\n\n");
+	printf("\n\n\nPlaintext:\n");
+	printOut(text);
 	
-	printf("Ciphertext:\n");
-	for (i = 0; i < strlen(ciphertext); i++)
-	{
-		if (i % 80 == 0)
-			printf("\n");
-		printf("%c",ciphertext[i]);
-	}
+	printf("\n\n\nCiphertext:\n");
+	printOut(ciphertext);
 	printf("\n");
+	
+	free(key);
+	free(text);
+	free(ciphertext);
+	
 	return 0;
 }
