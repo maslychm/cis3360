@@ -1,4 +1,4 @@
-//Mykola Maslych for CIS331160
+//Mykola Maslych for CIS3360
 
 #include <stdio.h>
 #include <stdlib.h>
