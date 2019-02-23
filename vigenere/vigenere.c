@@ -1,3 +1,5 @@
+//Mykola Maslych for CIS331160
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
