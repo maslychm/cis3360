@@ -3,8 +3,6 @@
 #include <stdint.h>
 #include <string.h>
 
-int valid[3] = {8, 16, 32};
-
 void print80(char *str)
 {
 	for (int i = 0; i < strlen(str); i++)
@@ -15,7 +13,7 @@ void print80(char *str)
 	}
 }
 
-int calc8bit(char *input)
+unsigned long int calc8bit(char *input)
 {
 	int result = 0;
 	for (int i = 0; i < strlen(input); i++)
@@ -26,7 +24,7 @@ int calc8bit(char *input)
 	return result;
 }
 
-int calc16bit(char *input)
+unsigned long int calc16bit(char *input)
 {
 	int res16bit = 0;
 	for (int i = 0; i < strlen(input);)
@@ -39,9 +37,9 @@ int calc16bit(char *input)
 	return res16bit;
 }
 
-int calc32bit(char *input)
+unsigned long int calc32bit(char *input)
 {
-	unsigned long long int res32bit = 0;
+	unsigned long int res32bit = 0;
 	for (int i = 0; i < strlen(input);)
 	{
 		res32bit += input[i] << 24;
@@ -58,9 +56,9 @@ int main(int argc, char **argv)
 {
     FILE	*inputfile;
 	char *input, *output, *checksum, c = 'x';
-	int res8bit = 0;
-	int res16bit = 0;
-	int res32bit = 0;
+	unsigned long int res8bit = 0;
+	unsigned long int res16bit = 0;
+	unsigned long int res32bit = 0;
 	int	i = 0; 
 	int checksum_size = 0;
 
