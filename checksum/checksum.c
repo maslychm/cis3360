@@ -72,15 +72,12 @@ int main(int argc, char **argv)
     }
 
 	// Make sure checksum size is correct
-    if (!(atoi(argv[2]) == 8 || atoi(argv[2]) == 16 || atoi(argv[2]) == 32))
+	checksum_size = atoi(argv[2]);
+    if (!(checksum_size == 8 || checksum_size == 16 || checksum_size == 32))
     {
         fprintf(stderr,"Valid checksum sizes are 8, 16, or 32\n");
 		return -1;
     }
-	else
-	{
-		checksum_size = atoi(argv[2]);
-	}
 
 	// Open the input file
     if (!(inputfile = fopen(argv[1],"r")))
@@ -96,6 +93,7 @@ int main(int argc, char **argv)
 		input[i] = c;
 		i++;
 	}
+	input[i + 1] = '\0';
 	
 	// Close the file
 	fclose(inputfile);
@@ -106,7 +104,7 @@ int main(int argc, char **argv)
 		res8bit = calc8bit(input);
 		print80(input);
 		printf("\n");
-		printf("%2d bit checksum is %8lx for all %4d chars\n", atoi(argv[2]), res8bit & 0xff, strlen(input));
+		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res8bit & 0xff, strlen(input));
 		//printf("%x\n",res8bit & 0xff);
 		break;
 	case 16:
@@ -115,7 +113,7 @@ int main(int argc, char **argv)
 		print80(input);
 		printf("\n");
 		res16bit = calc16bit(input);
-		printf("%2d bit checksum is %8lx for all %4d chars\n", atoi(argv[2]), res16bit & 0xffff, strlen(input));
+		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res16bit & 0xffff, strlen(input));
 		//printf("%x\n",res16bit & 0xffff);
 		break;
 	case 32:
@@ -124,7 +122,7 @@ int main(int argc, char **argv)
 		print80(input);
 		printf("\n");
 		res32bit = calc32bit(input);
-		printf("%2d bit checksum is %8lx for all %4d chars\n", atoi(argv[2]), res32bit & 0xffffffff, strlen(input));
+		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res32bit & 0xffffffff, strlen(input));
 		//printf("%llx\n",res32bit & 0xffffffff);
 		break;
 	}
