@@ -102,8 +102,7 @@ int main(int argc, char **argv)
 		res8bit = calc8bit(input);
 		print80(input);
 		printf("\n");
-		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res8bit & 0xff, strlen(input));
-		//printf("%x\n",res8bit & 0xff);
+		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res8bit & 0xff, (int)strlen(input));
 		break;
 	case 16:
 		if (strlen(input) % 2)
@@ -111,8 +110,7 @@ int main(int argc, char **argv)
 		print80(input);
 		printf("\n");
 		res16bit = calc16bit(input);
-		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res16bit & 0xffff, strlen(input));
-		//printf("%x\n",res16bit & 0xffff);
+		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res16bit & 0xffff, (int)strlen(input));
 		break;
 	case 32:
 		while (strlen(input) % 4)
@@ -120,8 +118,7 @@ int main(int argc, char **argv)
 		print80(input);
 		printf("\n");
 		res32bit = calc32bit(input);
-		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res32bit & 0xffffffff, strlen(input));
-		//printf("%llx\n",res32bit & 0xffffffff);
+		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res32bit & 0xffffffff, (int)strlen(input));
 		break;
 	}
 	
