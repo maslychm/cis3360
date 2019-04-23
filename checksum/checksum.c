@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 int valid[3] = {8, 16, 32};
 
@@ -14,55 +15,54 @@ void print80(char *str)
 	}
 }
 
-char calc8bit(char *input)
+int calc8bit(char *input)
 {
-	int8_t result = 0;
+	int result = 0;
 	for (int i = 0; i < strlen(input); i++)
 	{
-		printf("int %d\n", input[i]);
 		result += input[i];
-		printf("res %d\n", result);
-		//result = result % 255;
 	}
 
 	return result;
 }
 
-char calc16bit(char *input)
+int calc16bit(char *input)
 {
-	// each two characters should be added to checksum so input[i+1]input[i]
-	int16_t result = 0;
-	for (int i = 0; i < strlen(input); i++)
+	int res16bit = 0;
+	for (int i = 0; i < strlen(input);)
 	{
-		printf("int %d\n", input[i]);
-		result += input[i];
-		printf("res %d\n", result);
+		res16bit += input[i] << 8;
+		res16bit += (input[i + 1]);
+		i+=2;
 	}
 
-	return result;
+	return res16bit;
 }
 
-char calc32bit(char *input)
+int calc32bit(char *input)
 {
-	int32_t result = 0;
-	for (int i = 0; i < strlen(input); i++)
+	unsigned long long int res32bit = 0;
+	for (int i = 0; i < strlen(input);)
 	{
-		printf("%x\n", input[i]);
-		result += input[i];
+		res32bit += input[i] << 24;
+		res32bit += (input[i + 1]) << 16;
+		res32bit += (input[i + 2]) << 8;
+		res32bit += (input[i + 3]);
+		i+=4;
 	}
-
-	return result;
+	
+	return res32bit;
 }
 
 int main(int argc, char **argv)
 {
     FILE	*inputfile;
 	char *input, *output, *checksum, c = 'x';
-	int8_t res8bit = 0;
-	int16_t res16bit = 0;
-	int32_t res32bit = 0;
-	int	i = 0, 
-			checksum_size = 0;
+	int res8bit = 0;
+	int res16bit = 0;
+	int res32bit = 0;
+	int	i = 0; 
+	int checksum_size = 0;
 
 	// Wrong number of arguments passed
     if (argc != 3)
@@ -96,29 +96,38 @@ int main(int argc, char **argv)
 		input[i] = c;
 		i++;
 	}
-	//input[i + 1] = '\0';
 	
-	print80(input);
-	
+	// Close the file
 	fclose(inputfile);
-
+	
 	switch (checksum_size)
 	{
 	case 8:
 		res8bit = calc8bit(input);
+		print80(input);
+		printf("\n");
+		printf("%2d bit checksum is %8lx for all %4d chars\n", atoi(argv[2]), res8bit & 0xff, strlen(input));
+		//printf("%x\n",res8bit & 0xff);
 		break;
 	case 16:
+		if (strlen(input) % 2)
+			strcat(input,"X");
+		print80(input);
+		printf("\n");
 		res16bit = calc16bit(input);
+		printf("%2d bit checksum is %8lx for all %4d chars\n", atoi(argv[2]), res16bit & 0xffff, strlen(input));
+		//printf("%x\n",res16bit & 0xffff);
 		break;
 	case 32:
+		while (strlen(input) % 4)
+			strcat(input,"X");
+		print80(input);
+		printf("\n");
 		res32bit = calc32bit(input);
+		printf("%2d bit checksum is %8lx for all %4d chars\n", atoi(argv[2]), res32bit & 0xffffffff, strlen(input));
+		//printf("%llx\n",res32bit & 0xffffffff);
 		break;
 	}
-
-	printf("\n%x\n",res8bit);
-	printf("\n%x\n", res16bit);
-	printf("\n%x\n", res32bit);
-	//printf("%2d bit checksum is %8lx for all %4d chars\n", checkSumSize, checksum, characterCnt);
-
+	
     return 0;
 }
