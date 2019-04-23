@@ -89,9 +89,10 @@ int main(int argc, char **argv)
 	while (fscanf(inputfile, "%c", &c) != EOF && i < 1024)
 	{
 		input[i] = c;
+		printf("%c",c);
 		i++;
 	}
-	input[i + 1] = '\0';
+	input[i] = '\0';
 	
 	// Close the file
 	fclose(inputfile);
