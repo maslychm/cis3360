@@ -1,3 +1,5 @@
+// Mykola Maslych for CIS3360
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -54,12 +56,12 @@ unsigned long int calc32bit(char *input)
 
 int main(int argc, char **argv)
 {
-    FILE	*inputfile;
+    FILE *inputfile;
 	char *input, *output, *checksum, c = 'x';
 	unsigned long int res8bit = 0;
 	unsigned long int res16bit = 0;
 	unsigned long int res32bit = 0;
-	int	i = 0; 
+	int	i = 0;
 	int checksum_size = 0;
 
 	// Wrong number of arguments passed
