@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <string.h>
 
+// Function that prints 80 characters per line
 void print80(char *str)
 {
 	for (int i = 0; i < strlen(str); i++)
@@ -15,6 +16,7 @@ void print80(char *str)
 	}
 }
 
+// Calculate 8 bit checksum from the input string
 unsigned long int calc8bit(char *input)
 {
 	int result = 0;
@@ -26,6 +28,7 @@ unsigned long int calc8bit(char *input)
 	return result;
 }
 
+// Calculate 16 bit checksum from the input string
 unsigned long int calc16bit(char *input)
 {
 	int res16bit = 0;
@@ -39,6 +42,7 @@ unsigned long int calc16bit(char *input)
 	return res16bit;
 }
 
+// Calculate 32 bit checksum from the input string
 unsigned long int calc32bit(char *input)
 {
 	unsigned long int res32bit = 0;
@@ -104,22 +108,27 @@ int main(int argc, char **argv)
 		res8bit = calc8bit(input);
 		print80(input);
 		printf("\n");
+		// Use 0xff masking to display only last 2 hex values
 		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res8bit & 0xff, (int)strlen(input));
 		break;
 	case 16:
+		// Pad with a necessary X
 		if (strlen(input) % 2)
 			strcat(input,"X");
 		print80(input);
 		printf("\n");
 		res16bit = calc16bit(input);
+		// Use 0xffff masking to display only last 4 hex values
 		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res16bit & 0xffff, (int)strlen(input));
 		break;
 	case 32:
+		// Pad with necessary X's
 		while (strlen(input) % 4)
 			strcat(input,"X");
 		print80(input);
 		printf("\n");
 		res32bit = calc32bit(input);
+		// Use 0xffffffff masking to display only last 8 hex values
 		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res32bit & 0xffffffff, (int)strlen(input));
 		break;
 	}
